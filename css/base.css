@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+    --color-verde: #2E8B57;
+    --color-amarillo: #FFD700;
+    --color-cafe: #8B4513;
+    --color-fondo: #F7F7F7;
+    --color-texto: #333333;
+    --color-texto-secundario: #666666;
+}
+body{
+    background-color: var(--color-fondo);
+    color:var(--color-texto);
+    margin: 0;
+}
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+}
+.navbar {
+    background-color: var(--color-verde) !important;
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: 700;
+}
+
+.nav-link {
+    color: white;
+}
+.nav-link:hover {
+    color: var(--color-amarillo);
+}
+
+.hero{
+    text-aling:center;
+    padding: 80px 20px;
+}
+.hero h1 {
+    color: var(--color-verde);
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+.hero p {
+    color: var(--color-texto-secundario);
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+.boton-principal {
+    background-color: var(--color-verde);
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.boton-principal:hover {
+    background-color: var(--color-cafe);
+    color: white;
+}
