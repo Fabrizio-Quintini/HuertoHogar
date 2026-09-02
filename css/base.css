@@ -94,3 +94,17 @@ footer {
 footer p {
     margin: 0;
 }
+.catalogo {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.catalogo h1 {
+    color: var(--color-verde);
+    margin-bottom: 20px;
+}
+
+.catalogo p {
+    color: var(--color-texto-secundario);
+    margin-bottom: 40px;
+}
