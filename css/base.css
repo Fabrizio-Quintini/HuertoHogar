@@ -69,3 +69,28 @@ h1, h2, h3 {
     margin: 15px;
     border-radius: 8px;
 }
+.sobre-nosotros {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.sobre-nosotros h2 {
+    color: var(--color-verde);
+    margin-bottom: 20px;
+}
+
+.sobre-nosotros p {
+    color: var(--color-texto-secundario);
+    margin-bottom: 30px;
+}
+
+footer {
+    background-color: var(--color-verde);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+footer p {
+    margin: 0;
+}
