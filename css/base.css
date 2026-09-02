@@ -108,3 +108,85 @@ footer p {
     color: var(--color-texto-secundario);
     margin-bottom: 40px;
 }
+
+.registro {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 60px 20px;
+}
+
+.registro h1 {
+    color: var(--color-verde);
+    margin-bottom: 30px;
+}
+
+.registro .form-control {
+    border-radius: 5px;
+}
+
+.registro .form-control:focus {
+    border-color: var(--color-verde);
+    box-shadow: 0 0 0 0.2rem rgba(46, 139, 87, 0.25);
+}
+
+.registro .form-text {
+    color: var(--color-texto-secundario);
+}
+
+.nosotros {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.nosotros h1 {
+    color: var(--color-verde);
+    margin-bottom: 30px;
+}
+
+.nosotros p {
+    color: var(--color-texto-secundario);
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.nosotros-mision,
+.nosotros-vision {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.nosotros-mision h2,
+.nosotros-vision h2 {
+    color: var(--color-verde);
+    margin-bottom: 20px;
+}
+
+.nosotros-mision p,
+.nosotros-vision p {
+    color: var(--color-texto-secundario);
+    line-height: 1.8;
+}
+
+.nosotros-tiendas {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.nosotros-tiendas h2 {
+    color: var(--color-verde);
+    margin-bottom: 30px;
+}
+
+.tarjeta-ciudad {
+    background-color: white;
+    padding: 20px;
+    margin: 15px;
+    border-radius: 8px;
+}
+
+.tarjeta-ciudad h3 {
+    color: var(--color-verde);
+    margin-bottom: 0;
+}

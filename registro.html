@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro - HuertoHogar</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <link rel="stylesheet" href="css/base.css">
+    </head>
+
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+
+                    <a class="navbar-brand" href="index.html">HuertoHogar</a>
+
+                    <button class="navbar-toggler" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="index.html">Inicio</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="productos.html">Productos</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="nosotros.html">Nosotros</a>
+                            </li>
+
+                        </ul>
+
+                        <a class="nav-link active" aria-current="page" href="registro.html">Registrarse</a>
+                    </div>
+
+                </div>
+            </nav>
+        </header>
+
+        <main>
+            <section class="registro">
+                <h1>Crear cuenta</h1>
+
+                <form id="form-registro" novalidate>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" required>
+                        <div class="invalid-feedback">Por favor ingresa tu nombre.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" required>
+                        <div class="invalid-feedback">Por favor ingresa tu apellido.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" required>
+                        <div class="invalid-feedback">Por favor ingresa un correo válido.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contrasena" class="form-label">Contraseña</label>
+                        <input type="password" class="form-control" id="contrasena" minlength="6" required>
+                        <div class="form-text">Mínimo 6 caracteres.</div>
+                        <div class="invalid-feedback">La contraseña debe tener al menos 6 caracteres.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirmar" class="form-label">Confirmar contraseña</label>
+                        <input type="password" class="form-control" id="confirmar" minlength="6" required>
+                        <div class="invalid-feedback">Las contraseñas no coinciden.</div>
+                    </div>
+
+                    <button type="submit" class="boton-principal">Registrarse</button>
+                </form>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 HuertoHogar. Todos los derechos reservados.</p>
+        </footer>
+
+        <script src="js/main.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
