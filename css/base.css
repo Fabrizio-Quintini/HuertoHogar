@@ -32,10 +32,11 @@ h1, h2, h3 {
     color: var(--color-amarillo);
 }
 
-.hero{
-    text-aling:center;
+.hero {
+    text-align: center;
     padding: 80px 20px;
 }
+
 .hero h1 {
     color: var(--color-verde);
     font-size: 48px;
