@@ -32,10 +32,11 @@ h1, h2, h3 {
     color: var(--color-amarillo);
 }
 
-.hero{
-    text-aling:center;
+.hero {
+    text-align: center;
     padding: 80px 20px;
 }
+
 .hero h1 {
     color: var(--color-verde);
     font-size: 48px;
@@ -189,4 +190,11 @@ footer p {
 .tarjeta-ciudad h3 {
     color: var(--color-verde);
     margin-bottom: 0;
+}
+.imagen-producto {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
 }
