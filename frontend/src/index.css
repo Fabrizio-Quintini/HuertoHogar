@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+    --color-verde: #2E8B57;
+    --color-amarillo: #FFD700;
+    --color-cafe: #8B4513;
+    --color-fondo: #F7F7F7;
+    --color-texto: #333333;
+    --color-texto-secundario: #666666;
+}
+
+body {
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Playfair Display', serif;
+}
+
+.navbar-huertohogar {
+    background-color: var(--color-verde) !important;
+}
+
+.navbar-huertohogar .navbar-brand,
+.navbar-huertohogar .nav-link {
+    color: white;
+}
+
+.navbar-huertohogar .nav-link:hover {
+    color: var(--color-amarillo);
+}
+
+.navbar-huertohogar .nav-link.active {
+    color: var(--color-amarillo);
+    font-weight: 700;
+}
+
+.contenido-principal {
+    min-height: 60vh;
+}
+
+.catalogo {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.catalogo h1 {
+    color: var(--color-verde);
+    margin-bottom: 20px;
+}
+
+.catalogo > p {
+    color: var(--color-texto-secundario);
+    margin-bottom: 40px;
+}
+
+.barra-filtros {
+    align-items: end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+.campo-busqueda,
+.selector-categoria {
+    max-width: 280px;
+    width: 100%;
+}
+
+.conteo-resultados {
+    color: var(--color-texto-secundario);
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.tarjeta-producto {
+    border: 1px solid #e3e3e3;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.tarjeta-producto .card-title {
+    color: var(--color-cafe);
+    font-family: 'Playfair Display', serif;
+    margin: 12px 0 8px;
+}
+
+.categoria-badge {
+    background-color: var(--color-verde);
+}
+
+.precio {
+    color: var(--color-verde);
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.tarjeta-producto-accion {
+    background-color: transparent;
+    border-top: 1px solid #e3e3e3;
+}
+
+.estado-catalogo,
+.sin-resultados {
+    color: var(--color-texto-secundario);
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.pagina-placeholder {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.pagina-placeholder h1 {
+    color: var(--color-verde);
+    margin-bottom: 20px;
+}
+
+.pagina-placeholder p {
+    color: var(--color-texto-secundario);
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.pie-pagina {
+    background-color: var(--color-verde);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.pie-pagina p {
+    margin: 0;
+}
