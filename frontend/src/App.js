@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LayoutTienda from './templates/LayoutTienda';
 import Placeholder from './pages/Placeholder';
 import Productos from './pages/Productos';
+import Inicio from './pages/Inicio';
+import Nosotros from './pages/Nosotros';
+import Registro from './pages/Registro';
 
 function App() {
     return (
@@ -12,13 +15,11 @@ function App() {
                     path="/"
                     render={() => (
                         <LayoutTienda>
-                            <Placeholder
-                                titulo="Inicio"
-                                descripcion="HuertoHogar conecta productores locales con familias. Esta vista se migra a React en una segunda etapa."
-                            />
+                            <Inicio />
                         </LayoutTienda>
                     )}
                 />
+
                 <Route
                     exact
                     path="/productos"
@@ -28,28 +29,25 @@ function App() {
                         </LayoutTienda>
                     )}
                 />
+
                 <Route
                     path="/nosotros"
                     render={() => (
                         <LayoutTienda>
-                            <Placeholder
-                                titulo="Nosotros"
-                                descripcion="Próximamente: quiénes somos y dónde puedes encontrarnos."
-                            />
+                                <Nosotros/>
                         </LayoutTienda>
                     )}
                 />
+
                 <Route
                     path="/registro"
                     render={() => (
                         <LayoutTienda>
-                            <Placeholder
-                                titulo="Registrarse"
-                                descripcion="Próximamente: creación de cuenta con validación en tiempo real."
-                            />
+                            <Registro />
                         </LayoutTienda>
                     )}
                 />
+
                 <Route
                     render={() => (
                         <LayoutTienda>

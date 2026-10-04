@@ -23,10 +23,27 @@ function escribirEnAlmacen(productos) {
 
 function obtenerTodos() {
     const guardados = leerDelAlmacen();
+
     if (!guardados) {
         return escribirEnAlmacen([...productosIniciales]);
     }
-    return guardados;
+
+    const actualizados = guardados.map((productoGuardado) => {
+        const productoInicial = productosIniciales.find(
+            (producto) => producto.codigo === productoGuardado.codigo
+        );
+
+        if (!productoInicial) {
+            return productoGuardado;
+        }
+
+        return {
+            ...productoGuardado,
+            imagen: productoInicial.imagen
+        };
+    });
+
+    return escribirEnAlmacen(actualizados);
 }
 
 function listarProductos() {
@@ -57,7 +74,9 @@ function actualizarProducto(codigo, cambios) {
 
 function eliminarProducto(codigo) {
     return esperar(LATENCIA_SIMULADA).then(() => {
-        const restantes = obtenerTodos().filter((producto) => producto.codigo !== codigo);
+        const restantes = obtenerTodos().filter(
+            (producto) => producto.codigo !== codigo
+        );
         return escribirEnAlmacen(restantes);
     });
 }

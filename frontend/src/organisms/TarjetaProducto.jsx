@@ -4,9 +4,16 @@ import Boton from '../atoms/Boton';
 import EtiquetaPrecio from '../atoms/EtiquetaPrecio';
 
 function TarjetaProducto({ producto, onAgregar }) {
+
     return (
         <Card className="tarjeta-producto h-100">
             <Card.Body>
+                <img
+                    src={producto.imagen}
+                    alt={producto.nombre}
+                    className="imagen-producto"
+                />
+
                 <BadgeCategoria>{producto.categoria}</BadgeCategoria>
                 <Card.Title as="h3">{producto.nombre}</Card.Title>
                 <EtiquetaPrecio valor={producto.precio} />
