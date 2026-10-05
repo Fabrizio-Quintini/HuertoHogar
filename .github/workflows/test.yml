@@ -27,7 +27,9 @@ jobs:
       - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          # Node 24 para que el CI use el mismo npm que genero el lockfile:
+          # con Node 18 (npm 10) `npm ci` fallaba de inmediato al validar el lock.
+          node-version: 24
           cache: npm
           cache-dependency-path: frontend/package-lock.json
 
