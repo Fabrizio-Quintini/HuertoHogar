@@ -39,7 +39,7 @@ function Navbar() {
                         >
                             Registrarse
                         </Nav.Link>
-                        <Nav.Link as={Link} to="/productos" className="carrito-enlace">
+                        <Nav.Link as={NavLink} to="/carrito" exact activeClassName="active" className="carrito-enlace">
                             {`Carrito (${totalItems})`}
                         </Nav.Link>
                     </Nav>

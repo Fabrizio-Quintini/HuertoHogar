@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import LayoutTienda from './templates/LayoutTienda';
 import Placeholder from './pages/Placeholder';
 import Productos from './pages/Productos';
+import Carrito from './pages/Carrito';
 import Inicio from './pages/Inicio';
 import Nosotros from './pages/Nosotros';
 import Registro from './pages/Registro';
@@ -26,6 +27,16 @@ function App() {
                     render={() => (
                         <LayoutTienda>
                             <Productos />
+                        </LayoutTienda>
+                    )}
+                />
+
+                <Route
+                    exact
+                    path="/carrito"
+                    render={() => (
+                        <LayoutTienda>
+                            <Carrito />
                         </LayoutTienda>
                     )}
                 />
