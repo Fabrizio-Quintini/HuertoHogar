@@ -15,165 +15,129 @@ const MANZANAS = { codigo: 'FR001', nombre: 'Manzanas Fuji', precio: 1500, canti
 const ESPINACAS = { codigo: 'VR002', nombre: 'Espinacas Frescas', precio: 1100, cantidad: 1 };
 
 describe('normalizarCantidad', () => {
-    it('respeta una cantidad valida', () => {
+    it('devuelve siempre un entero entre 1 y el maximo permitido', () => {
+        // Una cantidad ya valida se respeta tal cual.
         expect(normalizarCantidad(7)).toBe(7);
-    });
 
-    it('convierte a entero las cantidades decimales', () => {
+        // Los decimales se truncan hacia abajo.
         expect(normalizarCantidad(2.9)).toBe(2);
-    });
 
-    it('sube a 1 las cantidades menores que 1', () => {
+        // Las cadenas numericas se convierten.
+        expect(normalizarCantidad('5')).toBe(5);
+
+        // Todo lo que no llega a 1 se sube a 1, incluidos los valores no numericos.
         expect(normalizarCantidad(0)).toBe(1);
         expect(normalizarCantidad(-5)).toBe(1);
-    });
-
-    it('baja a 1 los valores no numericos', () => {
         expect(normalizarCantidad('abc')).toBe(1);
         expect(normalizarCantidad(NaN)).toBe(1);
-    });
 
-    it('trunca las cadenas numericas', () => {
-        expect(normalizarCantidad('5')).toBe(5);
-    });
+        // El input vacio de type="number" se trata como 1 en vez de propagar NaN.
+        expect(normalizarCantidad('')).toBe(1);
 
-    it('limita al maximo permitido', () => {
+        // El tope se aplica sin pasarse.
         expect(normalizarCantidad(CANTIDAD_MAXIMA)).toBe(CANTIDAD_MAXIMA);
         expect(normalizarCantidad(500)).toBe(CANTIDAD_MAXIMA);
         expect(normalizarCantidad(99.9)).toBe(CANTIDAD_MAXIMA);
     });
-
-    it('trata el input vacio como 1 en vez de propagar NaN', () => {
-        expect(normalizarCantidad('')).toBe(1);
-    });
 });
 
 describe('esCantidadVacia', () => {
-    it('reconoce el input vacio de type="number"', () => {
+    it('reconoce el input vacio sin confundirlo con el cero explicito', () => {
+        // type="number" entrega '' al borrar para reescribir, y ese caso no
+        // debe interpretarse como "quedarse sin unidades".
         expect(esCantidadVacia('')).toBe(true);
-    });
-
-    it('reconoce null y undefined', () => {
         expect(esCantidadVacia(null)).toBe(true);
         expect(esCantidadVacia(undefined)).toBe(true);
-    });
 
-    it('no confunde el cero explicito con el input vacio', () => {
+        // El cero del usuario es una cantidad real, no un input vacio.
         expect(esCantidadVacia(0)).toBe(false);
         expect(esCantidadVacia('0')).toBe(false);
-    });
-
-    it('no confunde una cadena no numerica con el input vacio', () => {
         expect(esCantidadVacia('abc')).toBe(false);
     });
 });
 
 describe('puedeAumentar', () => {
-    it('permite aumentar mientras quede margen', () => {
+    it('solo permite aumentar mientras quede margen antes del tope', () => {
         expect(puedeAumentar(1)).toBe(true);
         expect(puedeAumentar(CANTIDAD_MAXIMA - 1)).toBe(true);
-    });
 
-    it('bloquea al llegar al maximo', () => {
         expect(puedeAumentar(CANTIDAD_MAXIMA)).toBe(false);
         expect(puedeAumentar(CANTIDAD_MAXIMA + 10)).toBe(false);
     });
 });
 
 describe('calcularSubtotal', () => {
-    it('suma el precio de cada linea multiplicado por su cantidad', () => {
+    it('suma el precio de cada linea por su cantidad, normalizando los valores', () => {
         // 1500 x 2 + 1100 x 1 = 4100
         expect(calcularSubtotal([MANZANAS, ESPINACAS])).toBe(4100);
-    });
 
-    it('devuelve 0 para un carrito vacio', () => {
+        // Un carrito vacio o con una forma inesperada no rompe la operacion.
         expect(calcularSubtotal([])).toBe(0);
-    });
-
-    it('devuelve 0 cuando el carrito no es un array', () => {
         expect(calcularSubtotal(null)).toBe(0);
         expect(calcularSubtotal(undefined)).toBe(0);
         expect(calcularSubtotal({ producto: 'Manzanas' })).toBe(0);
-    });
 
-    it('normaliza la cantidad antes de multiplicar', () => {
+        // La cantidad se normaliza antes de multiplicar, en vez de propagar NaN.
         expect(calcularSubtotal([{ ...MANZANAS, cantidad: 0 }])).toBe(1500);
         expect(calcularSubtotal([{ ...MANZANAS, cantidad: '' }])).toBe(1500);
         expect(calcularSubtotal([{ ...MANZANAS, cantidad: 500 }])).toBe(1500 * 99);
-    });
 
-    it('trata un precio ilegible como cero', () => {
+        // Un precio ilegible pesa cero en vez de arruinar toda la suma.
         expect(calcularSubtotal([{ codigo: 'X', precio: 'gratis', cantidad: 2 }])).toBe(0);
     });
 });
 
 describe('calcularEnvio y calcularTotal', () => {
-    it('devuelve el costo de despacho fijo', () => {
+    it('devuelve el costo de despacho fijo y lo suma al subtotal', () => {
         expect(calcularEnvio()).toBe(COSTO_ENVIO);
-    });
-
-    it('suma subtotal y envio', () => {
         expect(calcularTotal(2600, COSTO_ENVIO)).toBe(2600 + COSTO_ENVIO);
-    });
 
-    it('tolera valores no numericos', () => {
+        // Tolera valores no numericos devolviendo un total utilizable.
         expect(calcularTotal('abc', 'xyz')).toBe(0);
         expect(calcularTotal(null, undefined)).toBe(0);
     });
 });
 
 describe('normalizarLinea', () => {
-    it('completa la cantidad y el precio de una linea valida', () => {
+    it('completa una linea valida y descarta las que no son utilizables', () => {
         expect(normalizarLinea({ codigo: 'FR001', precio: '1500', cantidad: '3' })).toEqual({
             codigo: 'FR001',
             nombre: '',
             precio: 1500,
             cantidad: 3
         });
-    });
 
-    it('rechaza lineas sin codigo', () => {
+        // Sin codigo la linea no se puede identificar y se descarta.
         expect(normalizarLinea({ nombre: 'Manzanas', precio: 1500 })).toBeNull();
-    });
 
-    it('rechaza valores que no son objetos', () => {
+        // Tampoco se admiten valores que no son objetos.
         expect(normalizarLinea(null)).toBeNull();
         expect(normalizarLinea('FR001')).toBeNull();
         expect(normalizarLinea([MANZANAS])).toBeNull();
-    });
 
-    it('deja el precio en cero cuando no es numerico', () => {
+        // Un precio ilegible queda en cero para no romper los calculos.
         expect(normalizarLinea({ codigo: 'FR001', precio: 'gratis' }).precio).toBe(0);
     });
 });
 
 describe('normalizarLineas', () => {
-    it('parsea y normaliza el JSON guardado en el navegador', () => {
-        const guardado = JSON.stringify([MANZANAS, ESPINACAS]);
-
-        expect(normalizarLineas(guardado)).toEqual([MANZANAS, ESPINACAS]);
-    });
-
-    it('devuelve lista vacia cuando el contenido es un objeto y no un array', () => {
-        expect(normalizarLineas(JSON.stringify({ producto: 'Manzanas Fuji' }))).toEqual([]);
-    });
-
-    it('devuelve lista vacia cuando el JSON esta corrupto', () => {
-        expect(normalizarLineas('{no es json')).toEqual([]);
-    });
-
-    it('devuelve lista vacia cuando no hay nada guardado', () => {
-        expect(normalizarLineas(null)).toEqual([]);
-        expect(normalizarLineas('')).toEqual([]);
-    });
-
-    it('descarta las lineas corruptas y conserva las validas', () => {
+    it('parsea el carrito guardado conservando solo las lineas validas', () => {
         const guardado = JSON.stringify([MANZANAS, null, { sinCodigo: true }, ESPINACAS]);
 
         expect(normalizarLineas(guardado)).toEqual([MANZANAS, ESPINACAS]);
-    });
+        expect(normalizarLineas(JSON.stringify([MANZANAS, ESPINACAS]))).toEqual([
+            MANZANAS,
+            ESPINACAS
+        ]);
 
-    it('acepta un array ya parseado', () => {
+        // Un almacen corrupto o con forma de objeto en vez de array no debe
+        // propagar el error: la app quedaria en pantalla blanca.
+        expect(normalizarLineas('{no es json')).toEqual([]);
+        expect(normalizarLineas(JSON.stringify({ producto: 'Manzanas Fuji' }))).toEqual([]);
+        expect(normalizarLineas(null)).toEqual([]);
+        expect(normalizarLineas('')).toEqual([]);
+
+        // Tambien acepta un array ya parseado.
         expect(normalizarLineas([MANZANAS])).toEqual([MANZANAS]);
     });
 });

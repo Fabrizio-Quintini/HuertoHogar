@@ -228,24 +228,28 @@ salten de línea cuando no caben.
 ```
 frontend/karma.conf.js     configuración del runner
 frontend/src/test/setup.js  matchers propios y reseteo de localStorage
-frontend/src/**/*.spec.js   11 archivos de pruebas
+frontend/src/**/*.spec.js   6 archivos de pruebas
 ```
 
 ## Qué se prueba y cómo
 
+La suite agrupa en pocas pruebas los casos relacionados de una misma función o
+flujo: cada `it` cubre un comportamiento y sostiene dentro sus aserciones. Así
+se evita repetir el mismo montaje decenas de veces sin agregar información.
+
 | Archivo | Pruebas | Foco |
 | --- | --- | --- |
-| `utils/carrito.spec.js` | 31 | Lógica pura: normalización de cantidades, subtotal, envío, total, saneado de datos |
-| `context/CarritoContext.spec.js` | 11 | Agregar, acumular cantidad, eliminar, vaciar, persistencia, datos corruptos |
-| `molecules/SelectorCantidad.spec.js` | 10 | Límites 1–99, input editable, borrador, deshabilitado de botones |
-| `services/productoService.spec.js` | 8 | Siembra, alta, edición, baja, filtrado, reinicio, recuperación de imagen |
-| `pages/Productos.spec.js` | 6 | Carga, filtro por categoría, búsqueda, carrito, error, sin resultados |
+| `utils/carrito.spec.js` | 7 | Lógica pura: normalización de cantidades, subtotal, envío, total, saneado de datos |
+| `context/CarritoContext.spec.js` | 4 | Acumular cantidad, totales, eliminar línea, persistencia y datos corruptos |
+| `pages/Productos.spec.js` | 3 | Carga, alta al carrito, filtros y mensajes de error |
 | `pages/Carrito.spec.js` | 3 | Listado, totales con envío, carrito vacío |
-| `molecules/ResumenCarrito.spec.js` | 2 | Render de importes y acciones deshabilitadas sin productos |
-| `organisms/FilaCarrito.spec.js` | 2 | Render de la línea y avisos al padre |
-| `organisms/TarjetaProducto.spec.js` | 2 | Render y callback `onAgregar` |
-| `organisms/GrillaProductos.spec.js` | 1 | Una tarjeta por producto |
-| `organisms/Navbar.spec.js` | 1 | Enlaces y contador del carrito |
+| `services/productoService.spec.js` | 2 | Siembra y resiembra ante datos corruptos, alta/edición/baja |
+| `molecules/SelectorCantidad.spec.js` | 1 | Regresión: borrar el input no debe avisar cantidad cero |
+
+Los componentes de presentación (`Navbar`, `TarjetaProducto`, `GrillaProductos`,
+`FilaCarrito`, `ResumenCarrito`) no tienen archivo de pruebas propio: se ejercitan
+desde las pruebas de página, que los renderizan dentro del árbol completo de
+`LayoutTienda`.
 
 ### Verificación de la lógica
 
@@ -410,7 +414,7 @@ Verificado: al subir el umbral a 99.9 %, Karma devuelve código de salida 1 y
 CI falla.
 
 ```text
-ERROR [coverage]: Coverage for statements (98.04%) does not meet global threshold (99.9%)
+ERROR [coverage]: Coverage for statements (93.13%) does not meet global threshold (99.9%)
 ```
 
 ### Automatización en CI
@@ -425,15 +429,15 @@ regresión de cobertura rompe la integración en lugar de pasar inadvertida.
 # Resultados
 
 ```text
-TOTAL: 77 SUCCESS   (11 archivos de pruebas)
+TOTAL: 20 SUCCESS   (6 archivos de pruebas)
 ```
 
 | Indicador | Cobertura | Umbral |
 | --- | --- | --- |
-| Statements | 98.04 % (201/205) | 75 % |
-| Branches | 94.31 % (83/88) | 70 % |
-| Functions | 98.93 % (93/94) | 75 % |
-| Lines | 97.96 % (193/197) | 75 % |
+| Statements | 93.13 % (190/204) | 75 % |
+| Branches | 93.18 % (82/88) | 70 % |
+| Functions | 90.32 % (84/93) | 75 % |
+| Lines | 93.36 % (183/196) | 75 % |
 
 `npm run lint` sin errores.
 
@@ -442,18 +446,25 @@ TOTAL: 77 SUCCESS   (11 archivos de pruebas)
 | Archivo | Statements | Branches | Functions |
 | --- | --- | --- | --- |
 | `utils/carrito.js` | 100 % | 100 % | 100 % |
-| `services/productoService.js` | 100 % | 100 % | 100 % |
-| `molecules/SelectorCantidad.jsx` | 100 % | 100 % | 100 % |
+| `atoms/*.jsx` | 100 % | 100 % | 100 % |
+| `organisms/Navbar.jsx` | 100 % | — | 100 % |
 | `organisms/TarjetaProducto.jsx` | 100 % | — | 100 % |
 | `organisms/GrillaProductos.jsx` | 100 % | — | 100 % |
-| `organisms/Navbar.jsx` | 100 % | — | 100 % |
-| `organisms/FilaCarrito.jsx` | 100 % | — | 100 % |
+| `organisms/Footer.jsx` | 100 % | — | 100 % |
+| `molecules/BarraFiltros.jsx` | 100 % | 100 % | 100 % |
+| `molecules/CampoBusqueda.jsx` | 100 % | 100 % | 100 % |
+| `molecules/SelectorCategoria.jsx` | 100 % | 100 % | 100 % |
 | `molecules/ResumenCarrito.jsx` | 100 % | — | 100 % |
-| `atoms/*.jsx` | 100 % | 100 % | 100 % |
+| `templates/LayoutTienda.jsx` | 100 % | — | 100 % |
+| `utils/formato.js` | 100 % | — | 100 % |
+| `data/productos.js` | 100 % | — | — |
 | `hooks/useProductos.js` | 100 % | 75 % | 100 % |
 | `pages/Productos.jsx` | 96.8 % | 90 % | 100 % |
-| `context/CarritoContext.js` | 94.3 % | 85.7 % | 100 % |
+| `services/productoService.js` | 91.9 % | 100 % | 80 % |
+| `context/CarritoContext.js` | 88.2 % | 85.7 % | 94.7 % |
 | `pages/Carrito.jsx` | 85.7 % | 100 % | 75 % |
+| `molecules/SelectorCantidad.jsx` | 80 % | 50 % | 71.4 % |
+| `organisms/FilaCarrito.jsx` | 50 % | — | 50 % |
 
 ### Limitación conocida
 

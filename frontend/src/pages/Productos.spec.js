@@ -31,7 +31,7 @@ describe('Pagina Productos', () => {
         );
     });
 
-    it('pide los productos al servicio y renderiza una tarjeta por cada uno', async () => {
+it('pide los productos al servicio, renderiza una tarjeta por cada uno y permite agregarlos al carrito', async () => {
         renderCatalogo();
 
         expect(screen.getByText('Cargando productos...')).toBeTruthy();
@@ -44,35 +44,6 @@ describe('Pagina Productos', () => {
         expect(document.querySelectorAll('.tarjeta-producto').length).toBe(
             CATALOGO_PRUEBA.length
         );
-    });
-
-    it('filtra el catalogo segun la categoria seleccionada', async () => {
-        renderCatalogo();
-        await screen.findByText('Manzanas Fuji');
-
-        fireEvent.change(screen.getByLabelText('Categoría'), {
-            target: { value: 'Frutas Frescas' }
-        });
-
-        await waitFor(() => expect(screen.queryByText('Leche Entera')).toBeNull());
-        expect(screen.getByText('Manzanas Fuji')).toBeTruthy();
-        expect(screen.getByText('2 productos')).toBeTruthy();
-    });
-
-    it('filtra el catalogo por el texto escrito en la busqueda', async () => {
-        renderCatalogo();
-        await screen.findByText('Manzanas Fuji');
-
-        fireEvent.change(screen.getByLabelText('Buscar'), { target: { value: 'fuji' } });
-
-        await waitFor(() => expect(screen.queryByText('Leche Entera')).toBeNull());
-        expect(screen.getByText('Manzanas Fuji')).toBeTruthy();
-        expect(screen.getByText('1 producto')).toBeTruthy();
-    });
-
-    it('suma el producto al carrito y actualiza el contador del navbar', async () => {
-        renderCatalogo();
-        await screen.findByText('Manzanas Fuji');
 
         fireEvent.click(screen.getAllByRole('button', { name: 'Agregar' })[0]);
 
@@ -80,18 +51,44 @@ describe('Pagina Productos', () => {
         expect(JSON.parse(localStorage.getItem(CLAVE_CARRITO)).length).toBe(1);
     });
 
-    it('muestra un mensaje de error cuando el servicio no puede responder', async () => {
+    it('filtra el catalogo por categoria y por el texto de busqueda', async () => {
+        const { unmount } = renderCatalogo();
+        await screen.findByText('Manzanas Fuji');
+
+        // Filtro por categoria: solo quedan los productos de esa categoria.
+        fireEvent.change(screen.getByLabelText('Categoría'), {
+            target: { value: 'Frutas Frescas' }
+        });
+
+        await waitFor(() => expect(screen.queryByText('Leche Entera')).toBeNull());
+        expect(screen.getByText('Manzanas Fuji')).toBeTruthy();
+        expect(screen.getByText('2 productos')).toBeTruthy();
+
+        unmount();
+        renderCatalogo();
+        await screen.findByText('Manzanas Fuji');
+
+        // Filtro por texto escrito en la busqueda.
+        fireEvent.change(screen.getByLabelText('Buscar'), { target: { value: 'fuji' } });
+
+        await waitFor(() => expect(screen.queryByText('Leche Entera')).toBeNull());
+        expect(screen.getByText('Manzanas Fuji')).toBeTruthy();
+        expect(screen.getByText('1 producto')).toBeTruthy();
+    });
+
+    it('informa cuando el servicio falla y cuando el filtro no deja resultados', async () => {
         productoService.listarProductos.and.returnValue(
             Promise.reject(new Error('No fue posible cargar los productos'))
         );
 
-        renderCatalogo();
+        const { unmount } = renderCatalogo();
 
         expect(await screen.findByText('No fue posible cargar los productos')).toBeTruthy();
         expect(screen.queryByText('Manzanas Fuji')).toBeNull();
-    });
 
-    it('informa cuando el filtro no deja resultados visibles', async () => {
+        unmount();
+        productoService.listarProductos.and.returnValue(Promise.resolve(CATALOGO_PRUEBA));
+
         renderCatalogo();
         await screen.findByText('Manzanas Fuji');
 
