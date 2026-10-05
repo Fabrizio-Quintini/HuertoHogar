@@ -24,22 +24,22 @@ function Navbar() {
                 <NavbarBootstrap.Collapse id="navbar-principal">
                     <Nav className="me-auto">
                         {ENLACES.map(({ to, label }) => (
-                            <Nav.Link key={to} as={NavLink} to={to} exact activeClassName="active">
+                            <Nav.Link key={to} as={NavLink} to={to} exact>
                                 {label}
                             </Nav.Link>
                         ))}
                     </Nav>
 
                     <Nav>
-                        <Nav.Link
-                            as={NavLink}
-                            to="/registro"
-                            exact
-                            activeClassName="active"
-                        >
+                        <Nav.Link as={NavLink} to="/registro" exact>
                             Registrarse
                         </Nav.Link>
-                        <Nav.Link as={NavLink} to="/carrito" exact activeClassName="active" className="carrito-enlace">
+                        <Nav.Link
+                            as={NavLink}
+                            to="/carrito"
+                            exact
+                            className="carrito-enlace"
+                        >
                             {`Carrito (${totalItems})`}
                         </Nav.Link>
                     </Nav>

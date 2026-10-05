@@ -1,11 +1,36 @@
+import { useEffect, useState } from 'react';
 import Boton from '../atoms/Boton';
 import EtiquetaPrecio from '../atoms/EtiquetaPrecio';
-import { normalizarCantidad, puedeAumentar } from '../utils/carrito';
+import {
+    esCantidadVacia,
+    normalizarCantidad,
+    puedeAumentar
+} from '../utils/carrito';
 
 function SelectorCantidad({ item, onCambio }) {
     const cantidad = normalizarCantidad(item.cantidad);
 
-    const cambiarCantidad = (nuevaCantidad) => onCambio(item, nuevaCantidad);
+    // Borrador local: el input es controlado, pero sin estado propio no deja
+    // escribir. Al vaciarlo para reescribir el valor, el input se quedaría
+    // bloqueado mostrando la última cantidad confirmada.
+    const [borrador, setBorrador] = useState(String(cantidad));
+
+    useEffect(() => {
+        setBorrador(String(cantidad));
+    }, [cantidad]);
+
+    const confirmar = (nuevaCantidad) => {
+        if (!esCantidadVacia(nuevaCantidad)) {
+            onCambio(item, nuevaCantidad);
+        }
+    };
+
+    const cambiarDesdeInput = (evento) => {
+        const escrito = evento.target.value;
+
+        setBorrador(escrito);
+        confirmar(escrito);
+    };
 
     return (
         <div className="selector-cantidad">
@@ -14,7 +39,7 @@ function SelectorCantidad({ item, onCambio }) {
                 size="sm"
                 ariaLabel={`Quitar una unidad de ${item.nombre}`}
                 disabled={cantidad <= 1}
-                onClick={() => cambiarCantidad(cantidad - 1)}
+                onClick={() => onCambio(item, cantidad - 1)}
             >
                 −
             </Boton>
@@ -23,9 +48,11 @@ function SelectorCantidad({ item, onCambio }) {
                 type="number"
                 className="form-control selector-cantidad-input"
                 min="1"
+                max="99"
                 aria-label={`Cantidad de ${item.nombre}`}
-                value={cantidad}
-                onChange={(evento) => cambiarCantidad(evento.target.value)}
+                value={borrador}
+                onChange={cambiarDesdeInput}
+                onBlur={() => setBorrador(String(cantidad))}
             />
 
             <Boton
@@ -33,7 +60,7 @@ function SelectorCantidad({ item, onCambio }) {
                 size="sm"
                 ariaLabel={`Agregar una unidad de ${item.nombre}`}
                 disabled={!puedeAumentar(cantidad)}
-                onClick={() => cambiarCantidad(cantidad + 1)}
+                onClick={() => onCambio(item, cantidad + 1)}
             >
                 +
             </Boton>

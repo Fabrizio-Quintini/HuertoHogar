@@ -10,7 +10,10 @@ const esperar = (milisegundos) =>
 function leerDelAlmacen() {
     try {
         const contenido = localStorage.getItem(CLAVE_PRODUCTOS);
-        return contenido ? JSON.parse(contenido) : null;
+        const datos = contenido ? JSON.parse(contenido) : null;
+        // Si el almacenamiento quedó corrupto o con otra forma, se descarta:
+        // un objeto plano haría fallar guardados.map() y rompería el catálogo.
+        return Array.isArray(datos) ? datos : null;
     } catch (error) {
         return null;
     }

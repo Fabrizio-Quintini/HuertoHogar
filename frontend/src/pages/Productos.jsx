@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import BarraFiltros from '../molecules/BarraFiltros';
@@ -28,39 +28,30 @@ function Productos() {
     const [categoria, setCategoria] = useState(parametros.get('categoria') || CATEGORIA_TODAS);
     const [busqueda, setBusqueda] = useState(parametros.get('q') || '');
 
-    const actualizarParametro = useCallback(
-        (nombre, valor) => {
-            const nuevosParametros = new URLSearchParams(location.search);
+    const actualizarParametro = (nombre, valor) => {
+        const nuevosParametros = new URLSearchParams(location.search);
 
-            if (valor) {
-                nuevosParametros.set(nombre, valor);
-            } else {
-                nuevosParametros.delete(nombre);
-            }
+        if (valor) {
+            nuevosParametros.set(nombre, valor);
+        } else {
+            nuevosParametros.delete(nombre);
+        }
 
-            history.replace({ pathname: location.pathname, search: nuevosParametros.toString() });
-        },
-        [history, location.pathname, location.search]
-    );
+        history.replace({ pathname: location.pathname, search: nuevosParametros.toString() });
+    };
 
-    const cambiarCategoria = useCallback(
-        (nuevaCategoria) => {
-            setCategoria(nuevaCategoria);
-            actualizarParametro(
-                'categoria',
-                nuevaCategoria === CATEGORIA_TODAS ? '' : nuevaCategoria
-            );
-        },
-        [actualizarParametro]
-    );
+    const cambiarCategoria = (nuevaCategoria) => {
+        setCategoria(nuevaCategoria);
+        actualizarParametro(
+            'categoria',
+            nuevaCategoria === CATEGORIA_TODAS ? '' : nuevaCategoria
+        );
+    };
 
-    const cambiarBusqueda = useCallback(
-        (nuevaBusqueda) => {
-            setBusqueda(nuevaBusqueda);
-            actualizarParametro('q', nuevaBusqueda.trim());
-        },
-        [actualizarParametro]
-    );
+    const cambiarBusqueda = (nuevaBusqueda) => {
+        setBusqueda(nuevaBusqueda);
+        actualizarParametro('q', nuevaBusqueda.trim());
+    };
 
     const visibles = useMemo(
         () => filtrarProductos(productos, categoria, busqueda),

@@ -1,9 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import {
     calcularEnvio,
     calcularSubtotal,
     calcularTotal,
-    normalizarCantidad
+    esCantidadVacia,
+    normalizarCantidad,
+    normalizarLineas
 } from '../utils/carrito';
 
 export const CLAVE_CARRITO = 'hh_carrito';
@@ -12,8 +14,7 @@ const CarritoContext = createContext(null);
 
 function leerCarritoGuardado() {
     try {
-        const contenido = localStorage.getItem(CLAVE_CARRITO);
-        return contenido ? JSON.parse(contenido) : [];
+        return normalizarLineas(localStorage.getItem(CLAVE_CARRITO));
     } catch (error) {
         return [];
     }
@@ -40,14 +41,22 @@ function agregarItem(items, producto) {
 }
 
 /**
- * Cambia la cantidad de una línea. Si la cantidad llega a 0 o es inválida,
- * la línea se elimina en lugar de dejar el carrito en un estado imposible.
+ * Cambia la cantidad de una línea.
+ * - Si el usuario borra el contenido del input para reescribirlo, la cantidad
+ *   llega vacía y NO se toca la línea: borrarla en ese momento hacía que el
+ *   producto desapareciera del carrito al simple hecho de teclear.
+ * - Si la cantidad llega a 0 o es ilegible, la línea se elimina en lugar de
+ *   dejar el carrito en un estado imposible.
  * @param {Array<object>} items Líneas del carrito.
  * @param {string} codigo Código del producto a modificar.
- * @param {number} cantidad Nueva cantidad.
+ * @param {number|string} cantidad Nueva cantidad.
  * @returns {Array<object>} Líneas actualizadas.
  */
 function cambiarCantidad(items, codigo, cantidad) {
+    if (esCantidadVacia(cantidad)) {
+        return items;
+    }
+
     const numero = Number(cantidad);
     const quedaSinUnidades = !Number.isFinite(numero) || numero < 1;
 
@@ -67,27 +76,25 @@ export function CarritoProvider({ children }) {
         localStorage.setItem(CLAVE_CARRITO, JSON.stringify(items));
     }, [items]);
 
-    const valor = useMemo(() => {
-        const subtotal = calcularSubtotal(items);
-        const envio = calcularEnvio();
+    const subtotal = calcularSubtotal(items);
+    const envio = calcularEnvio();
 
-        return {
-            items,
-            totalItems: items.reduce(
-                (total, item) => total + normalizarCantidad(item.cantidad),
-                0
-            ),
-            subtotal,
-            envio,
-            total: calcularTotal(subtotal, envio),
-            agregar: (producto) => setItems((actuales) => agregarItem(actuales, producto)),
-            actualizarCantidad: (codigo, cantidad) =>
-                setItems((actuales) => cambiarCantidad(actuales, codigo, cantidad)),
-            eliminar: (codigo) =>
-                setItems((actuales) => actuales.filter((item) => item.codigo !== codigo)),
-            vaciar: () => setItems([])
-        };
-    }, [items]);
+    const valor = {
+        items,
+        totalItems: items.reduce(
+            (total, item) => total + normalizarCantidad(item.cantidad),
+            0
+        ),
+        subtotal,
+        envio,
+        total: calcularTotal(subtotal, envio),
+        agregar: (producto) => setItems((actuales) => agregarItem(actuales, producto)),
+        actualizarCantidad: (codigo, cantidad) =>
+            setItems((actuales) => cambiarCantidad(actuales, codigo, cantidad)),
+        eliminar: (codigo) =>
+            setItems((actuales) => actuales.filter((item) => item.codigo !== codigo)),
+        vaciar: () => setItems([])
+    };
 
     return <CarritoContext.Provider value={valor}>{children}</CarritoContext.Provider>;
 }
